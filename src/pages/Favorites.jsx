@@ -1,24 +1,38 @@
+
+import { useEffect, useState } from 'react';
 import MovieGrid from '../components/MovieGrid';
 
 function Favorites() {
-  // Placeholder - students will implement localStorage retrieval
-  const favoriteMovies = [];
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const savedMovies = localStorage.getItem('movieshelf-favorites');
+
+    if (savedMovies) {
+      try {
+        setMovies(JSON.parse(savedMovies));
+      } catch (error) {
+        console.error('Error loading favorites:', error);
+        setMovies([]);
+      }
+    }
+  }, []);
 
   return (
     <main className="main-content">
       <div className="content-header">
-        <h2>My Favorites</h2>
-        <p>Your saved movies collection</p>
+        <h2>My Favorite Movies</h2>
+        <p>Your personal collection of favorite films</p>
       </div>
-      {favoriteMovies.length > 0 ? (
-        <MovieGrid movies={favoriteMovies} />
+
+      {movies.length > 0 ? (
+        <MovieGrid movies={movies} />
       ) : (
-        <div className="empty-state">
-          <p>No favorite movies yet. Start adding some from the home page!</p>
-        </div>
+        <p>You haven't added any favorite movies yet.</p>
       )}
     </main>
   );
-};
+}
 
 export default Favorites;
+
